@@ -1,0 +1,56 @@
+Part 2 notes:
+
+Term: Rx, Ry, Rz, Rdx, Rdy, Rdz are the rock position and velocities (what we want to solve for)
+
+h0x, h0y, h0z, h0dx, h0dy, h0dz are the first hailstone position and velocities
+h1x, h1y, h1z, h1dx, h1dy, h1dz are the second hailstone position and velocities, etc.
+
+t0 is when the rock will hit the first hailstone, t1 is when the rock will hit the second hailstone, etc.
+
+Rx + t0 Rdx === h0x + t0 h0dx
+t0 Rdx - t0 h0dx = h0x - Rx
+
+t0 = (h0x - Rx) / (Rdx - h0dx)
+
+Can do same equation as above for y, z
+
+t0 = (h0x - Rx) / (Rdx - h0dx)
+t0 = (h0y - Ry) / (Rdy - h0dy)
+t0 = (h0z - Rz) / (Rdz - h0dz)
+
+Taking first two and solving:
+
+(h0x - Rx) / (Rdx - h0dx) = (h0y - Ry) / (Rdy - h0dy)
+(h0x - Rx) * (Rdy - h0dy) = (Rdx - h0dx) * (h0y - Ry)
+
+h0x * Rdy - h0x * h0dy - Rx * Rdy + Rx * h0dy = Rdx * h0y - Ry * Rdx - h0dx * h0y + Ry * h0dx
+
+The Rx * Rdy term is tricky, we can't solve system of equations with them. Luckily since they
+ONLY have rock terms and no hailstone terms, we can write a similar equation with the next
+hailstone and subtract them:
+
+ h0x * Rdy - h0x * h0dy - Rx * Rdy + Rx * h0dy = Rdx * h0y - Ry * Rdx - h0dx * h0y + Ry * h0dx
+ h1x * Rdy - h1x * h1dy - Rx * Rdy + Rx * h1dy = Rdx * h1y - Ry * Rdx - h1dx * h1y + Ry * h1dx
+
+  h0x * Rdy - h0x * h0dy - Rx * Rdy + Rx * h0dy =   Rdx * h0y - Ry * Rdx - h0dx * h0y + Ry * h0dx
+- h1x * Rdy + h1x * h1dy + Rx * Rdy - Rx * h1dy = - Rdx * h1y + Ry * Rdx + h1dx * h1y - Ry * h1dx
+= ---
+ (h0x - h1x) Rdy - h0x * h0dy + h1x * h1dy + (h0dy - h1dy) Rx = (h0y - h1y) Rdx - h0dx * h0y + h1dx * h1y + (h0dx - h1dx) Ry
+
+// Solves for X and Y
+(h0dy - h1dy) Rx + (h1dx - h0dx) Ry + (h1y - h0y) Rdx + (h0x - h1x) Rdy + ( h0x * h0dy + h1x * h1dy + h0dx * h0y - h1dx * h1y ) = 0
+(h1dy - h2dy) Rx + (h2dx - h1dx) Ry + (h2y - h1y) Rdx + (h1x - h2x) Rdy + ( h1x * h1dy + h2x * h2dy + h1dx * h1y - h2dx * h2y ) = 0
+(h2dy - h3dy) Rx + (h3dx - h2dx) Ry + (h3y - h2y) Rdx + (h2x - h3x) Rdy + ( h2x * h2dy + h3x * h3dy + h2dx * h2y - h3dx * h3y ) = 0
+(h3dy - h4dy) Rx + (h4dx - h3dx) Ry + (h4y - h3y) Rdx + (h3x - h4x) Rdy + ( h3x * h3dy + h4x * h4dy + h3dx * h3y - h4dx * h4y ) = 0
+
+const [h0x, h0y, h0z, h0dx, h0dy, h0dz] = [19, 13, 30, -2,  1, -2]
+const [h1x, h1y, h1z, h1dx, h1dy, h1dz] = [18, 19, 22, -1, -1, -2]
+const [h2x, h2y, h2z, h2dx, h2dy, h2dz] = [20, 25, 34, -2, -2, -4]
+const [h3x, h3y, h3z, h3dx, h3dy, h3dz] = [12, 31, 28, -1, -2, -1]
+const [h4x, h4y, h4z, h4dx, h4dy, h4dz] = [20, 19, 15,  1, -5, -3]
+
+19, 13, 30 @ -2,  1, -2
+18, 19, 22 @ -1, -1, -2
+20, 25, 34 @ -2, -2, -4
+12, 31, 28 @ -1, -2, -1
+20, 19, 15 @  1, -5, -3
