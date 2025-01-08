@@ -61,16 +61,16 @@ const puzzle = (content: string, cheatDistance: number, threshold: number): numb
 
 	const getUntouchedNeighbors = (row: number, col: number) => {
 		const neighbors = [] as { row: number, col: number }[]
-		for (const delta of getAllCheatDeltas(1)) {
-			if (distanceToEnd[row + delta[0]]?.[col + delta[1]] === -1 && input.map[row + delta[0]]?.[col + delta[1]] === '.') {
-				neighbors.push({ row: row + delta[0], col: col + delta[1] })
+		for (const [deltaRow, deltaCol] of getAllCheatDeltas(1)) {
+			if (distanceToEnd[row + deltaRow]?.[col + deltaCol] === -1 && input.map[row + deltaRow]?.[col + deltaCol] === '.') {
+				neighbors.push({ row: row + deltaRow, col: col + deltaCol })
 			}
 		}
 		return neighbors
 	}
 
-    // Go through the whole map and find out (without cheating) how few steps
-    // you need to get from that part of the map to the end
+	// Go through the whole map and find out (without cheating) how few steps
+	// you need to get from that part of the map to the end
 	const nodes = [] as { row: number, col: number }[]
 	distanceToEnd[input.end.row][input.end.col] = 0
 	nodes.push({ row: input.end.row, col: input.end.col })
@@ -93,15 +93,13 @@ const puzzle = (content: string, cheatDistance: number, threshold: number): numb
 				continue
 			}
 			const distSoFar = distanceToEnd[row][col]
-			for (const cheatDelta of cheatDeltas) {
-				const betterDistance = distanceToEnd[row + cheatDelta[0]]?.[col + cheatDelta[1]]
-				if (typeof betterDistance === 'undefined' || betterDistance === -1) {
+			for (const [deltaRow, deltaCol, manhattanDistance] of cheatDeltas) {
+				const betterDistance = distanceToEnd[row + deltaRow]?.[col + deltaCol] ?? -1
+				if (betterDistance === -1) {
 					// Hitting a wall or out of bounds or something
 					continue
 				}
-				const manhattanDistance = cheatDelta[2]
 				const cheatImprovement = distSoFar - (manhattanDistance + betterDistance)
-			
 				if (cheatImprovement >= threshold) {
 					// Cheating would be worth it!
 					result += 1
@@ -109,7 +107,6 @@ const puzzle = (content: string, cheatDistance: number, threshold: number): numb
 			}
 		}
 	}
-
 	return result
 }
 
