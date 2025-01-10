@@ -1,4 +1,4 @@
-import { puzzle1 as puzzle1_01, puzzle2 as puzzle2_01 } from './01'
+import { puzzle1 as puzzle1_01, puzzle2 as puzzle2_01 } from './01/typescript'
 import { puzzle1 as puzzle1_02, puzzle2 as puzzle2_02 } from './02'
 import { puzzle1 as puzzle1_03, puzzle2 as puzzle2_03 } from './03'
 import { puzzle1 as puzzle1_04, puzzle2 as puzzle2_04 } from './04'

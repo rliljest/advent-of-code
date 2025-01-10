@@ -7,7 +7,7 @@ import { puzzles as puzzles2020 } from './2020'
 import { puzzles as puzzles2021 } from './2021'
 import { puzzles as puzzles2022 } from './2022'
 import { puzzles as puzzles2023 } from './2023'
-import { puzzles as puzzles2024 } from './2024'
+import { puzzles as puzzles2024 } from './2024/typescript'
 
 type Puzzle = (content: string, filename: string) => string | number
 
